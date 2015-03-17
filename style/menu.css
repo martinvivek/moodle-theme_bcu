@@ -172,11 +172,4 @@ and (min-width : 1224px) {
 
 .menutitle {
     height: 100%;
-    float: right;
-}
-
-@media (max-width: 990px) {
-    .menutitle {
-        float: none;
-    }
 }

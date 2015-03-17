@@ -96,15 +96,20 @@ class theme_bcu_core_renderer extends core_renderer {
                         get_string('messages', 'message'), 9999);
             }
             foreach ($messages as $message) {
-
-                $senderpicture = new user_picture($message->from);
-                $senderpicture->link = false;
-                $senderpicture = $this->render($senderpicture);
+                if ($message->from instanceof stdClass) {
+                    $senderpicture = new user_picture($message->from);
+                    $senderpicture->link = false;
+                    $senderpicture = $this->render($senderpicture);
+                } else {
+                    $senderpicture = "";
+                }
 
                 $messagecontent = $senderpicture;
                 $messagecontent .= html_writer::start_tag('span', array('class' => 'msg-body'));
                 $messagecontent .= html_writer::start_tag('span', array('class' => 'msg-title'));
-                $messagecontent .= html_writer::tag('span', $message->from->firstname . ': ', array('class' => 'msg-sender'));
+                if ($message->from) {
+                    $messagecontent .= html_writer::tag('span', $message->from->firstname . ': ', array('class' => 'msg-sender'));
+                }
                 $messagecontent .= $message->text;
                 $messagecontent .= html_writer::end_tag('span');
                 $messagecontent .= html_writer::start_tag('span', array('class' => 'msg-time'));
@@ -112,8 +117,13 @@ class theme_bcu_core_renderer extends core_renderer {
                 $messagecontent .= html_writer::tag('span', $message->date);
                 $messagecontent .= html_writer::end_tag('span');
 
-                $messagemenu->add($messagecontent, new moodle_url('/message/index.php', array('user1' => $USER->id,
-                        'user2' => $message->from->id)));
+                $arguments = array('user1' => $USER->id);
+                if ($message->from) {
+                    $arguments['user2'] = $message->from->id;
+                }
+                $messagemenu->add(
+                    $messagecontent, new moodle_url('/message/index.php', $arguments)
+                );
             }
         }
 
@@ -188,7 +198,9 @@ class theme_bcu_core_renderer extends core_renderer {
         $messagecontent = new stdClass();
 
         if ($message->notification) {
-            $messagecontent->text = get_string('unreadnewnotification', 'message');
+            $messagecontent->text = $message->smallmessage;
+            $messagecontent->type = 'notification';
+            $messagecontent->url = new moodle_url($message->contexturl);
         } else {
             if ($message->fullmessageformat == FORMAT_HTML) {
                 $message->smallmessage = html_to_text($message->smallmessage);
@@ -212,7 +224,11 @@ class theme_bcu_core_renderer extends core_renderer {
         $messagecontent = new stdClass();
 
         if ($message->notification) {
-            $messagecontent->text = get_string('unreadnewnotification', 'message');
+            $messagecontent->text = $message->smallmessage;
+            $messagecontent->type = 'notification';
+            if (isset($message->contexturl)) {
+                $messagecontent->url = new moodle_url($message->contexturl);
+            }
         } else {
             if ($message->fullmessageformat == FORMAT_HTML) {
                 $message->smallmessage = html_to_text($message->smallmessage);
@@ -339,15 +355,15 @@ class theme_bcu_core_renderer extends core_renderer {
             $branchsort  = 9999;
             $branch = $menu->add($branchlabel, $branchurl, $branchtitle, $branchsort);
 
-            $mycoursetitle = "Events";
-            $branchtitle = "Events";
+            $mycoursetitle = "Календарь";
+            $branchtitle = "Календарь";
             $branchlabel = '<i class="fa fa-calendar"></i> '.$branchtitle;
             $branchurl   = new moodle_url('/calendar/view.php');
             $branchsort  = 10000;
             $branch = $menu->add($branchlabel, $branchurl, $branchtitle, $branchsort);
 
-            $mycoursetitle = "My Sites";
-            $branchtitle = "My Sites";
+            $mycoursetitle = "Мои курсы";
+            $branchtitle = "Мои курсы";
             $branchlabel = '<i class="fa fa-briefcase"></i><span class="menutitle">'.$branchtitle.'</span>';
             $branchurl   = new moodle_url('/my/index.php');
             $branchsort  = 10001;
