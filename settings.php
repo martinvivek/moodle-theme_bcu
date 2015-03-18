@@ -183,7 +183,17 @@ if (is_siteadmin()) {
     $description = get_string('enablehelpdesc', 'theme_bcu');
     $setting = new admin_setting_configtext($name, $title, $description, '', PARAM_URL);
     $temp->add($setting);
-
+    
+    $name = 'theme_bcu/helptarget';
+    $title = get_string('helptarget', 'theme_bcu'); 
+    $description = get_string('helptargetdesc', 'theme_bcu');
+    $choices = array(
+        '_blank' => get_string('targetnewwindow', 'theme_bcu'),
+        '_self' => get_string('targetsamewindow', 'theme_bcu'),
+    );
+    $setting = new admin_setting_configselect($name, $title, $description, '_blank', $choices);
+    $temp->add($setting);
+    
     $ADMIN->add('theme_bcu', $temp);
 
     $temp = new admin_settingpage('theme_bcu_frontpage_blocks', get_string('frontpageblocksettings', 'theme_bcu'));
@@ -349,6 +359,7 @@ if (is_siteadmin()) {
     $choices = array(
         1 => get_string('frontpagerendereroption1', 'theme_bcu'),
         2 => get_string('frontpagerendereroption2', 'theme_bcu'),
+        3 => get_string('frontpagerendereroption3', 'theme_bcu'),
     );
     $setting = new admin_setting_configselect($name, $title, $description, 2, $choices);
     $setting->set_updatedcallback('theme_reset_all_caches');
@@ -365,6 +376,12 @@ if (is_siteadmin()) {
     $title = get_string('tilesshowcontacts', 'theme_bcu');
     $description = get_string('tilesshowcontactsdesc', 'theme_bcu');
     $setting = new admin_setting_configcheckbox($name, $title, $description, 1);
+    $temp->add($setting);
+    
+    $name = 'theme_bcu/tilesshowallcontacts';
+    $title = get_string('tilesshowallcontacts', 'theme_bcu');
+    $description = get_string('tilesshowallcontactsdesc', 'theme_bcu');
+    $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
     $temp->add($setting);
     
     $name = 'theme_bcu/tilescontactstitle';

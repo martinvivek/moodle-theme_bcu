@@ -111,6 +111,12 @@ function theme_bcu_process_css($css, $theme) {
     }
     $css = theme_bcu_set_buttonhovercolour($css, $buttonhovercolour);
     
+    if(empty($theme->settings->tilesshowallcontacts) || $theme->settings->tilesshowallcontacts == false) {
+        $css = theme_bcu_set_tilesshowallcontacts($css, false);
+    } else {
+        $css = theme_bcu_set_tilesshowallcontacts($css, true);
+    }
+        
     return $css;
 }
 
@@ -224,22 +230,15 @@ function theme_bcu_set_buttonhovercolour($css, $buttonhovercolour) {
     return $css;
 }
 
-/**
- * Deprecated: Please call theme_bcu_process_css instead.
- * @deprecated since 2.5.1
- */
-function bcu_process_css($css, $theme) {
-    debugging('Please call theme_'.__FUNCTION__.' instead of '.__FUNCTION__, DEBUG_DEVELOPER);
-    return theme_bcu_process_css($css, $theme);
-}
-
-/**
- * Deprecated: Please call theme_bcu_set_customcss instead.
- * @deprecated since 2.5.1
- */
-function bcu_set_customcss($css, $customcss) {
-    debugging('Please call theme_'.__FUNCTION__.' instead of '.__FUNCTION__, DEBUG_DEVELOPER);
-    return theme_bcu_set_customcss($css, $customcss);
+function theme_bcu_set_tilesshowallcontacts($css, $display) {
+    $tag = '[[setting:tilesshowallcontacts]]';
+    if($display) {
+        $replacement = 'block';
+    } else {
+        $replacement = 'none';
+    }
+    $css = str_replace($tag, $replacement, $css);
+    return $css;
 }
 
 function theme_bcu_initialise_zoom(moodle_page $page) {

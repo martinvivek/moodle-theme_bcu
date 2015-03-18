@@ -12,7 +12,7 @@ html,body,p,ul,ol,dl,input,textarea {
 	font-family: sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, , h6 {
 	margin: 0px 0px 10px;
 	font-family: 'Droid Sans', sans-serif;
 }
@@ -648,8 +648,8 @@ span2.mceEditor iframe, table.mceLayout2 iframe {
 	}
 	
 	.coursebox .panel-body p {
-    font-size: 90%;
-    line-height: 130%;
+            font-size: 90%;
+            line-height: 130%;
 	}
 	
 	.enrolmenticons {
@@ -753,15 +753,6 @@ span2.mceEditor iframe, table.mceLayout2 iframe {
 	}
 	#page-header .userimg {
 		display: none;
-	}
-	div#coursetitle {
-	    clear: both;
-	    float: none;
-	    max-width: inherit;
-	    padding: 10px;
-	    text-align: center;
-	    width: auto;
-	    margin-bottom: -25px;
 	}
 	
 	#coursesearchbox2 {
@@ -1028,15 +1019,25 @@ button.close {
 	font-size: 1.4em;
 }
 
-@media (max-width: 778px) {
+@media (max-width: 979px) {
 	.searchbox {
-		padding-bottom: 5px;
+            padding-bottom: 5px;
 	}
 	.search-box, .searchbox {
-		width: 100%;
+            width: 100%;
 	}
 	#search-1 {
-		width: calc(100% - 39px);
+            width: calc(100% - 39px);
+	}
+        
+        div#coursetitle {
+	    clear: both;
+	    float: none;
+	    max-width: inherit;
+	    padding: 10px;
+	    text-align: center;
+	    width: auto;
+	    margin-bottom: -25px;
 	}
 }
 
@@ -1084,7 +1085,7 @@ div.questionbankwindow.block {
 	padding-right: 5px;
 }
 
-.fselect select {
+.fselect #id_courses {
 	width: 100% !important;
 }
 
@@ -1203,8 +1204,6 @@ max-width: 100%;
 line-height: normal;
 }
 
-
-
 .coursebox.hover .boxfooter {
 	clear: none;
 	margin-bottom: 0;
@@ -1216,6 +1215,19 @@ line-height: normal;
 
 .paging .paging-morelink {
     clear: both;
+}
+
+#region-main {
+    overflow-x: auto; 
+}
+
+.dir-rtl.path-mod-forum .indent {
+    margin-right: 3%;
+    margin-left: 0;
+}
+
+.path-mod-forum .indent {
+    margin-left: 3%;
 }
 
 /* Custom CSS Settings

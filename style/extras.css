@@ -631,7 +631,7 @@ textarea#page-mod-forum-discuss .discussioncontrols .discussioncontrol.movediscu
 } 
 
 .coursebox.panel ul.teachers li {
-	display: none;
+    display: [[setting:tilesshowallcontacts]];
 }
 
 .coursebox.panel ul.teachers li:first-child {

@@ -64,7 +64,7 @@ class theme_bcu_core_renderer extends core_renderer {
     }
 
     protected function render_user_menu(custom_menu $menu) {
-        global $CFG, $USER, $DB, $PAGE;
+        global $CFG, $USER, $DB, $PAGE, $OUTPUT;
 
         $addusermenu = true;
         $addlangmenu = true;
@@ -96,20 +96,22 @@ class theme_bcu_core_renderer extends core_renderer {
                         get_string('messages', 'message'), 9999);
             }
             foreach ($messages as $message) {
-                if ($message->from instanceof stdClass) {
+                if(!is_object($message->from)) {
+                    $url = $OUTPUT->pix_url('u/f2');
+                    $attributes = array(
+                        'src' => $url
+                    );
+                    $senderpicture = html_writer::empty_tag('img', $attributes);
+                } else {
                     $senderpicture = new user_picture($message->from);
                     $senderpicture->link = false;
                     $senderpicture = $this->render($senderpicture);
-                } else {
-                    $senderpicture = "";
                 }
-
+                
                 $messagecontent = $senderpicture;
                 $messagecontent .= html_writer::start_tag('span', array('class' => 'msg-body'));
                 $messagecontent .= html_writer::start_tag('span', array('class' => 'msg-title'));
-                if ($message->from) {
-                    $messagecontent .= html_writer::tag('span', $message->from->firstname . ': ', array('class' => 'msg-sender'));
-                }
+                $messagecontent .= html_writer::tag('span', $message->from->firstname . ': ', array('class' => 'msg-sender'));
                 $messagecontent .= $message->text;
                 $messagecontent .= html_writer::end_tag('span');
                 $messagecontent .= html_writer::start_tag('span', array('class' => 'msg-time'));
@@ -415,7 +417,7 @@ class theme_bcu_core_renderer extends core_renderer {
                 $mycoursetitle = "Help";
                 $branchtitle = "Help";
                 $branchlabel = '<i class="fa fa-life-ring"></i>'.$branchtitle;
-                $branchurl   = new moodle_url($PAGE->theme->settings->enablehelp);
+                $branchurl   = new moodle_url($PAGE->theme->settings->enablehelp.'" target="'.$PAGE->theme->settings->helptarget.'"');
                 $branchsort  = 10003;
                 $branch = $menu->add($branchlabel, $branchurl, $branchtitle, $branchsort);
             }
@@ -558,12 +560,12 @@ class theme_bcu_core_course_renderer extends core_course_renderer {
     protected function coursecat_coursebox(coursecat_helper $chelper, $course, $additionalclasses = '') {
         global $CFG, $OUTPUT;
         $type = theme_bcu_get_setting('frontpagerenderer');
+        if($type == 3 || $OUTPUT->body_id() != 'page-site-index') {
+            return parent::coursecat_coursebox($chelper, $course, $additionalclasses = '');
+        }
         $additionalcss = '';
         if($type==2) {
             $additionalcss = 'hover';
-        }
-        if ($OUTPUT->body_id() != 'page-site-index') {
-            return parent::coursecat_coursebox($chelper, $course, $additionalclasses = '');
         }
 
         if (!isset($this->strings->summary)) {
@@ -654,7 +656,7 @@ class theme_bcu_core_course_renderer extends core_course_renderer {
 
     // Type - 1 = No Overlay
     // Type - 2 = Overlay
-    protected function coursecat_coursebox_content(coursecat_helper $chelper, $course, $type=1) {
+    protected function coursecat_coursebox_content(coursecat_helper $chelper, $course, $type=3) {
         global $CFG, $OUTPUT, $PAGE;
         if ($chelper->get_show_courses() < self::COURSECAT_SHOW_COURSES_EXPANDED) {
             return '';
@@ -662,6 +664,9 @@ class theme_bcu_core_course_renderer extends core_course_renderer {
         if ($course instanceof stdClass) {
             require_once($CFG->libdir. '/coursecatlib.php');
             $course = new course_in_list($course);
+        }
+        if($type == 3 || $OUTPUT->body_id() != 'page-site-index') {
+            return parent::coursecat_coursebox_content($chelper, $course);
         }
         $content = '';
 

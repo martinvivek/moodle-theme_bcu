@@ -1,3 +1,22 @@
+Changes in version 1.1.1 (2015022500)
+-------------------------------------
+- FIX: Issue #50 - Include Moodle fix for older Moodle versions to correct threading in forums (LINK)
+- FIX: Issue #95 - Fixed issue with coursebox renders on frontpage.
+- FIX: Issue #101 - Prevent role assignments table from overflowing content area
+- FIX: Issue #102 - Upgrade FontAwesome from 4.2 to 4.3
+- FIX: Issue #103 - Prevent activity completion report from overflowing content area
+- FIX: Issue #104 - Restore Moodle's default renderer for rendering list of courses
+- FIX: Issue #105 - Added ability to set a target for the help link (uses [this](https://tracker.moodle.org/browse/MDL-35420))
+- FIX: Issue #107 - Fix issue with "My Sites" link in IE
+- FIX: Issue #108 - Docking is now enabled by default for Moodle versions higher than 2.6.3
+- FIX: Issue #109 - Fixed overflowing select box on enrolling users
+- FIX: Issue #110 - Fix issue with whitespace when showing/hiding blocks in FireFox
+- FIX: Issue #113 - Fixed issue with the menu on smaller screen sizes
+- FIX: Issue #116 - Added option to display all course contacts
+- FIX: Issue #117 - Removed javascript debugging code
+- FIX: Issue #118 - Improve consistency of header on smaller screens
+
+
 Changes in version 1.1 (2015012300)
 -------------------------------------
 - FIX: Issue #22 - Fixes issues with the menu when viewing on an iPad
