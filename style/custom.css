@@ -35,7 +35,13 @@ a:active {
 }
 
 a:focus {
-    outline: 0;
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus, .dropdown-submenu:hover>a, .dropdown-submenu:focus>a {
+    background-color: #FFF;
+    background-image: none;
 }
 /* Custom CSS
 -------------------------*/
@@ -532,38 +538,6 @@ div.redirectmessage {
     padding: 20px 20px 40px;  
 }
 
-/*buttons */
-input[type="submit"], input[type="button"], #searchform_button, a.submit, #notice .singlebutton + .singlebutton input, .submit.buttons input[name="cancel"], #page-login-index2 .forgetpass a, .btn {
-	background: [[setting:buttoncolour]] !important;
-	text-shadow: none;
-	box-shadow: 0 -2px 0 0 rgba(0, 0, 0, 0.5) inset;
-	border: 0px;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	border-radius: 2px;
-	background-size: 100% 200%;
-	color: #fff !important;
-	cursor: pointer;    
-	padding: 8px 15px 8px;
-	-webkit-transition: background .2s ease-out;
-	-moz-transition: background .2s ease-out;
-	-ie-transition: background .2s ease-out;
-	-o-transition: background .2s ease-out;
-	transition: background .2s ease-out;
-}
-
-#notice .singlebutton + .singlebutton input, .submit.buttons input[name="cancel"] {
-	background: #0084C2 !important;
-	text-shadow: none;
-}
-
-input[type="submit"]:hover, input[type="button"]:hover, #searchform_button:hover, a.submit:hover, #notice .singlebutton + .singlebutton input:hover, .submit.buttons input[name="cancel"]:hover,#page-login-index2 .forgetpass a:hover, .btn:hover, .btn:active {
-	 background-position: 0 -100%;
-	 text-decoration: none !important;
-	 color: #fff;
-	 background-color: [[setting:buttonhovercolour]] !important;
-}
-
 #forummenu select {
     margin-top: 10px;
     width: 100%;
@@ -731,39 +705,33 @@ span2.mceEditor iframe, table.mceLayout2 iframe {
 }
 
 @media (max-width: 520px) {
-	#main-slider {
-		
-	}
-	#page-header {
-		
-	}
-	#logo {
-		
-	}
-	.flex-caption {
-		width: auto !important;
-		padding: 5px 0px !important;
-		position: relative !important;
-		margin-top: -1px !important;
-		background: #000 !important;
-	}
-	#page-content {
-	    padding: 0 0px;
-	    width: auto;
-	}
-	#page-header .userimg {
-		display: none;
-	}
-	
-	#coursesearchbox2 {
-		display: none;
-	}
-	
-	#above-header .dropdown.secondone {
-		display: none;
-	}
+    #main-slider {
 
-	
+    }
+    #page-header {
+
+    }
+    #logo {
+
+    }
+    .flex-caption {
+        width: auto !important;
+        padding: 5px 0px !important;
+        position: relative !important;
+        margin-top: -1px !important;
+        background: #000 !important;
+    }
+    #page-content {
+        padding: 0 0px;
+        width: auto;
+    }
+    #page-header .userimg {
+        display: none;
+    }
+
+    #coursesearchbox2 {
+        display: none;
+    }
 }
 
 #id_message_tbl {
@@ -793,14 +761,6 @@ span2.mceEditor iframe, table.mceLayout2 iframe {
 
 .submit {
 	white-space: nowrap;
-}
-
-button.close {
-	background: transparent !important;
-	text-shadow: none !Important;
-	color: #000 !important;
-	opacity: 1 !important;
-	box-shadow: none !important;
 }
 
 a.carousel-control {
@@ -940,12 +900,19 @@ button.close {
 	opacity: .2;
 }
 
-.pagelayout-redirect .no-overflow {
-	overflow-x: scroll;
+#region-main .generaltable {
+    display: block;
+    overflow-x: auto;
+    overflow-y: visible;
 }
 
-.gradetreebox {
-	overflow-x: scroll;
+div.no-overflow, .yui3-datatable {
+    overflow-y: visible;
+    overflow-x: auto;
+}
+
+.paging {
+    word-wrap: break-word;
 }
 
 .path-course-view .completionprogress {
@@ -1185,7 +1152,6 @@ div.questionbankwindow.block {
 	padding-right: 0px;
 	border: 1px solid #eee !important;
 	box-shadow: none;
-	color: inherit;
 	font-weight: 300;
 	position: inherit;
 }
@@ -1217,10 +1183,6 @@ line-height: normal;
     clear: both;
 }
 
-#region-main {
-    overflow-x: auto; 
-}
-
 .dir-rtl.path-mod-forum .indent {
     margin-right: 3%;
     margin-left: 0;
@@ -1228,6 +1190,37 @@ line-height: normal;
 
 .path-mod-forum .indent {
     margin-left: 3%;
+}
+
+.gradingform_guide.editor .addcriterion input,
+.gradingform_guide.editor .addcomment input {background: #00aeef; display:block;font-weight:bold;text-decoration:none;}
+.gradingform_guide.editor .criterion .controls .delete input {width:20px;height:16px;background: transparent url([[pix:t/delete]]) no-repeat center top;margin-top:4px;}
+.gradingform_guide.editor .moveup input {width:20px;height:15px;background: transparent url([[pix:t/up]]) no-repeat center top;margin-top:4px;}
+.gradingform_guide.editor .movedown input {width:20px;height:15px;background: transparent url([[pix:t/down]]) no-repeat center top;margin-top:4px;}
+
+.gradingform_guide.editor .moveup input:hover {
+    background: #00aeef url([[pix:t/up]]) no-repeat center top;
+}
+
+.gradingform_guide.editor .movedown input:hover {
+    background: #00aeef url([[pix:t/up]]) no-repeat center top;
+}
+
+.gradingform_guide.editor .controls .delete input:hover {
+    background: #00aeef url([[pix:t/up]]) no-repeat center top;
+}
+
+.gradingform_guide.editor .addcriterion input, .gradingform_guide.editor .addcomment input {
+    padding-left: 10px;
+    line-height: 20px;
+    height: 36px;
+    background-position: 5px 12px;
+    color: #FFF;
+    font-weight: normal;
+}
+
+.gradingform_guide.editor .addcomment, .gradingform_guide.editor .addcriterion {
+    margin-top: 10px;
 }
 
 /* Custom CSS Settings

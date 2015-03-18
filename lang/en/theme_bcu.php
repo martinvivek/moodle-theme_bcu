@@ -273,3 +273,20 @@ $string['targetsamewindow'] = 'Same window';
 
 $string['tilesshowallcontacts'] = 'Show all course contacts';
 $string['tilesshowallcontactsdesc'] = 'Show all course contacts or just one';
+
+$string['toolsmenu'] = 'Tools menu';
+$string['toolsmenudesc'] = 'You can configure links to be shown under a tools menu. Each line consists of some menu text, a link URL (optional), a tooltip title (optional) and a language code or comma-separated list of codes (optional, for displaying the line to users of the specified language only), separated by pipe characters. You can specify a structure using hyphens. For example:
+<pre>
+Moodle community|https://moodle.org
+-Moodle free support|https://moodle.org/support
+-Moodle development|https://moodle.org/development
+--Moodle Docs|http://docs.moodle.org|Moodle Docs
+--German Moodle Docs|http://docs.moodle.org/de|Documentation in German|de
+Moodle.com|http://moodle.com/
+</pre>';
+
+$string['toolsmenulabel'] = 'Tools';
+$string['events'] = 'Events';
+$string['mysites'] = 'My Sites';
+$string['people'] = 'People';
+$string['help'] = 'Help';

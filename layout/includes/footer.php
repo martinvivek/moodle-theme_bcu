@@ -29,27 +29,27 @@
 <footer id="page-footer">
     <div id="course-footer"><?php echo $OUTPUT->course_footer(); ?></div>
     <div class="container">
-        <div class="row">
+        <div class="row-fluid">
             <?php if (!empty($PAGE->theme->settings->footer1content)) { ?>
-            <div class="left-col size4of16 span3" id="contactdetails">
+            <div class="left-col span3" id="contactdetails">
                 <h3 title="Contact Us"><?php echo $PAGE->theme->settings->footer1header; ?></h3>
                 <?php echo $PAGE->theme->settings->footer1content; ?>
             </div>
             <?php } ?>
             <?php if (!empty($PAGE->theme->settings->footer2content)) { ?>
-            <div class="left-col size6of16 span4" id="footer-faculties">
+            <div class="left-col span3" id="footer-faculties">
                 <h3 title="Our Faculties"><?php echo $PAGE->theme->settings->footer2header; ?></h3>
                 <?php echo $PAGE->theme->settings->footer2content; ?>
             </div>
             <?php } ?>
             <?php if (!empty($PAGE->theme->settings->footer3content)) { ?>
-            <div class="left-col size4of16 span3" id="social-connect">
+            <div class="left-col span3" id="social-connect">
                 <h3 title="Connect"><?php echo $PAGE->theme->settings->footer3header; ?></h3>
                 <?php echo $PAGE->theme->settings->footer3content; ?>
             </div>
             <?php } ?>
             <?php if (!empty($PAGE->theme->settings->footer4content)) { ?>
-            <div class="left-col size2of16 span2">
+            <div class="left-col span3">
                 <h3><?php echo $PAGE->theme->settings->footer4header; ?></h3>
                 <?php echo $PAGE->theme->settings->footer4content; ?>
             </div>

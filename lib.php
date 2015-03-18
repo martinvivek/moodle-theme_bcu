@@ -400,3 +400,13 @@ function theme_bcu_performance_output($param) {
     $html = html_writer::tag('span', get_string('loadtime', 'theme_bcu').' '. round($param['realtime'], 2) . ' ' . get_string('seconds'), array('id' => 'load'));
     return $html;
 }
+
+function theme_bcu_page_init(moodle_page $page) {
+    global $CFG;
+    $page->requires->jquery();
+    $page->requires->jquery_plugin('bootstrap', 'theme_bcu');
+    $page->requires->jquery_plugin('flexslider', 'theme_bcu');
+    $page->requires->jquery_plugin('easing', 'theme_bcu');
+    $page->requires->jquery_plugin('bcu', 'theme_bcu');
+    
+}

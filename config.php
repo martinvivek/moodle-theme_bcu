@@ -27,8 +27,7 @@
 $THEME->name = 'bcu';
 $THEME->doctype = 'html5';
 $THEME->parents = array('bootstrapbase');
-$THEME->sheets = array('custom', 'blocks', 'menu', 'course', 'slider', 'extras', 'zoom');
-$THEME->javascripts = array('jquery-1.7.2.min', 'bootstrap.min', 'jquery.flexslider-min', 'jquery.easing-1.3.min', 'custom');
+$THEME->sheets = array('custom', 'blocks', 'menu', 'course', 'slider', 'extras', 'zoom', 'button');
 $THEME->supportscssoptimisation = false;
 $THEME->yuicssmodules = array();
 

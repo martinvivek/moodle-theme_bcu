@@ -194,6 +194,12 @@ if (is_siteadmin()) {
     $setting = new admin_setting_configselect($name, $title, $description, '_blank', $choices);
     $temp->add($setting);
     
+    $name = 'theme_bcu/toolsmenu';
+    $title = get_string('toolsmenu', 'theme_bcu');
+    $description = get_string('toolsmenudesc', 'theme_bcu');
+    $setting = new admin_setting_configtextarea($name, $title, $description, '', PARAM_RAW, '50', '10');
+    $temp->add($setting);
+    
     $ADMIN->add('theme_bcu', $temp);
 
     $temp = new admin_settingpage('theme_bcu_frontpage_blocks', get_string('frontpageblocksettings', 'theme_bcu'));

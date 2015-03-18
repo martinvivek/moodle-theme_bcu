@@ -97,7 +97,7 @@ echo $OUTPUT->doctype();
    <?php echo $OUTPUT->lang_menu(); ?>
    <?php } else { ?>
     <div class="dropdown secondone">
-    <a class="dropdown-toggle usermendrop" data-toggle="dropdown" href="#"><span class="fa fa-user"></span><?php echo fullname($USER) ?> <span class="fa fa-angle-down"></span></a>
+    <a class="dropdown-toggle usermendrop" data-toggle="dropdown" data-target=".secondone"><span class="fa fa-user"></span><?php echo fullname($USER) ?> <span class="fa fa-angle-down"></span></a>
     <ul class="dropdown-menu usermen" role="menu">
 <?php if (!empty($PAGE->theme->settings->enablemy)) { ?>
 <li><a href="<?php p($CFG->wwwroot) ?>/my" title="My Dashboard"><i class="fa fa-dashboard"></i><?php echo get_string('myhome') ?></a></li>
@@ -149,7 +149,7 @@ echo $OUTPUT->doctype();
             <form action="<?php p($CFG->wwwroot) ?>/course/search.php">
                 <label class="hidden" for="search-1" style="display: none;">Search iCity</label>
                 <div class="search-box grey-box bg-white clear-fix">
-                    <input placeholder="Поиск по курсам" accesskey="6" class="search_tour bg-white no-border left search-box__input ui-autocomplete-input" type="text" name="search" id="search-1" autocomplete="off">
+                    <input placeholder="<?php echo get_string("searchcourses")?>" accesskey="6" class="search_tour bg-white no-border left search-box__input ui-autocomplete-input" type="text" name="search" id="search-1" autocomplete="off">
                     <button type="submit" class="no-border bg-white pas search-box__button"><abbr class="fa fa-search"></abbr></button>
                 </div>
             </form>
@@ -172,7 +172,10 @@ echo $OUTPUT->doctype();
                         <span class="icon-bar"></span>
                     </a>
                     <div class="nav-collapse collapse ">
+                        <?php echo $OUTPUT->navigation_menu(); ?>
                         <?php echo $OUTPUT->custom_menu(); ?>
+                        <?php echo $OUTPUT->tools_menu(); ?>
+                        
                         <ul class="nav pull-right">
                             <li class="hbl"><a href="#" class="moodlezoom"><i class="fa fa-indent fa-lg"></i> <span class="zoomdesc"><?php echo get_string('hideblocks', 'theme_bcu') ?></span></a></li>
                             <li class="sbl"><a href="#" class="moodlezoom"><i class="fa fa-outdent fa-lg"></i> <span class="zoomdesc"><?php echo get_string('showblocks', 'theme_bcu') ?></span></a></li>
