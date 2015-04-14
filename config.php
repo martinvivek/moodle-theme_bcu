@@ -33,7 +33,7 @@ $THEME->yuicssmodules = array();
 
 $THEME->editor_sheets = array();
 
-if (floatval($CFG->version) >= 2013111803.02) { // 2.6.3+
+if (floatval($CFG->version) >= 2013111803.02) {
     $THEME->enable_dock = true;
 }
 
@@ -144,7 +144,7 @@ $THEME->layouts = array(
     ),
     // The pagelayout used for reports.
     'report' => array(
-        'file' => 'columns2.php',
+        'file' => 'report.php',
         'regions' => array('side-post'),
         'defaultregion' => 'side-post',
     ),

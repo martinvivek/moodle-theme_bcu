@@ -1,5 +1,8 @@
 jQuery(document).ready(function($) {
     //new for every three
+    if($('header').css("position") == "fixed") {
+        $('.outercont').css('padding-top', $('header').height());
+    }
     var $pArr = $('.frontpage-course-list-all').children(".coursebox");
     var pArrLen = $pArr.length;
     var pPerDiv = 3;
@@ -61,19 +64,27 @@ jQuery(document).ready(function($) {
         sync                : "",                //{NEW} Selector: Mirror the actions performed on this slider with another slider. Use with care.
         asNavFor            : "",                //{NEW} Selector: Internal property exposed for turning the slider into a thumbnail navigation for another slider
     });
-    
+  
 $(".container.slidewrap").on('transitionend', function() {
     var slider1 = $('#main-slider').data('flexslider');
     slider1.resize();
 })
 
-    var offset = 220;
+    var offset = 50;
     var duration = 500;
     jQuery(window).scroll(function() {
         if (jQuery(this).scrollTop() > offset) {
             jQuery('.back-to-top').fadeIn(duration);
+            if($('header').css("position") == "fixed") {
+                jQuery('#page-header').hide();
+                Y.Global.fire('moodle-gradereport_grader:resized');
+            }
         } else {
             jQuery('.back-to-top').fadeOut(duration);
+            if($('header').css("position") == "fixed") {
+                jQuery('#page-header').show();
+                Y.Global.fire('moodle-gradereport_grader:resized');
+            }
         }
     });
     jQuery('.back-to-top').click(function(event) {

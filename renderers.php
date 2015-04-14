@@ -96,7 +96,7 @@ class theme_bcu_core_renderer extends core_renderer {
                         get_string('messages', 'message'), 9999);
             }
             foreach ($messages as $message) {
-                if(!is_object($message->from)) {
+                if (!is_object($message->from)) {
                     $url = $OUTPUT->pix_url('u/f2');
                     $attributes = array(
                         'src' => $url
@@ -107,7 +107,7 @@ class theme_bcu_core_renderer extends core_renderer {
                     $senderpicture->link = false;
                     $senderpicture = $this->render($senderpicture);
                 }
-                
+
                 $messagecontent = $senderpicture;
                 $messagecontent .= html_writer::start_tag('span', array('class' => 'msg-body'));
                 $messagecontent .= html_writer::start_tag('span', array('class' => 'msg-title'));
@@ -292,7 +292,7 @@ class theme_bcu_core_renderer extends core_renderer {
         $title = '<span class="accesshide">'.get_string('pagepath').'</span>';
         return $title . "<ul class=\"breadcrumb\">$listitems</ul>";
     }
-    
+
     public function footer() {
         global $CFG;
 
@@ -300,7 +300,7 @@ class theme_bcu_core_renderer extends core_renderer {
 
         $footer = $this->opencontainers->pop('header/footer');
 
-        // Provide some performance info if required
+        // Provide some performance info if required.
         $performanceinfo = '';
         if (defined('MDL_PERF') || (!empty($CFG->perfdebug) and $CFG->perfdebug > 7)) {
             $perf = get_performance_info();
@@ -354,7 +354,8 @@ class theme_bcu_core_renderer extends core_renderer {
             if ($sortedcourses) {
                 foreach ($sortedcourses as $course) {
                     if ($course->visible) {
-                        $branch->add(format_string($course->fullname), new moodle_url('/course/view.php?id='.$course->id), format_string($course->shortname));
+                        $branch->add(format_string($course->fullname), new moodle_url('/course/view.php?id='.$course->id),
+                                format_string($course->shortname));
                     }
                 }
             } else {
@@ -386,12 +387,13 @@ class theme_bcu_core_renderer extends core_renderer {
                         $branch->add($icon.$modfullname, new moodle_url('/course/resources.php', array('id' => $PAGE->course->id)));
                     } else {
                         $icon = '<img src="'.$OUTPUT->pix_url('icon', $modname) . '" class="icon" alt="" />';
-                        $branch->add($icon.$modfullname, new moodle_url('/mod/'.$modname.'/index.php', array('id' => $PAGE->course->id)));
+                        $branch->add($icon.$modfullname, new moodle_url('/mod/'.$modname.'/index.php',
+                                array('id' => $PAGE->course->id)));
                     }
                 }
             }
         }
-        
+
         if (!empty($PAGE->theme->settings->enablehelp)) {
             $branchtitle = "Help";
             $branchlabel = '<i class="fa fa-life-ring"></i>'.$branchtitle;
@@ -401,14 +403,15 @@ class theme_bcu_core_renderer extends core_renderer {
         }
         return $this->render_custom_menu($menu);
     }
-    
+
     public function tools_menu() {
         global $PAGE;
         $custommenuitems = '';
-        if(!empty($PAGE->theme->settings->toolsmenu)) {
-            $custommenuitems .= "<i class='fa fa-wrench'> </i>".get_string('toolsmenulabel', 'theme_bcu')."|#|".get_string('toolsmenulabel', 'theme_bcu')."\n";
+        if (!empty($PAGE->theme->settings->toolsmenu)) {
+            $custommenuitems .= "<i class='fa fa-wrench'> </i>".get_string('toolsmenulabel', 'theme_bcu')."|#|".
+                    get_string('toolsmenulabel', 'theme_bcu')."\n";
             $arr = explode("\n", $PAGE->theme->settings->toolsmenu);
-            // We want to force everything inputted under this menu
+            // We want to force everything inputted under this menu.
             foreach ($arr as $key => $value) {
                 $arr[$key] = '-' . $arr[$key];
             }
@@ -417,9 +420,38 @@ class theme_bcu_core_renderer extends core_renderer {
         $custommenu = new custom_menu($custommenuitems);
         return $this->render_custom_menu($custommenu);
     }
-    
-    public function custom_menu($custommenuitems = '')
-    {
+
+    public function lang_menu() {
+        global $CFG;
+        $langmenu = new custom_menu();
+
+        $addlangmenu = true;
+        $langs = get_string_manager()->get_list_of_translations();
+        if (count($langs) < 2
+            or empty($CFG->langmenu)
+            or ($this->page->course != SITEID and !empty($this->page->course->lang))
+        ) {
+            $addlangmenu = false;
+        }
+
+        if ($addlangmenu) {
+            $strlang = get_string('language');
+            $currentlang = current_language();
+            if (isset($langs[$currentlang])) {
+                $currentlang = $langs[$currentlang];
+            } else {
+                $currentlang = $strlang;
+            }
+            $this->language = $langmenu->add('<i class="fa fa-flag"></i><span class="langdesc">'.$currentlang.'</span>',
+                    new moodle_url('#'), $strlang, 100);
+            foreach ($langs as $langtype => $langname) {
+                $this->language->add($langname, new moodle_url($this->page->url, array('lang' => $langtype)), $langname);
+            }
+        }
+        return $this->render_custom_menu($langmenu);
+    }
+
+    public function custom_menu($custommenuitems = '') {
         global $CFG;
 
         if (empty($custommenuitems) && !empty($CFG->custommenuitems)) {
@@ -428,7 +460,7 @@ class theme_bcu_core_renderer extends core_renderer {
         $custommenu = new custom_menu($custommenuitems, current_language());
         return $this->render_custom_menu($custommenu);
     }
-    
+
     /*
      * This renders the bootstrap top menu.
      *
@@ -552,7 +584,7 @@ class theme_bcu_core_renderer extends core_renderer {
             return html_writer::tag('li', $link);
         }
     }
-    
+
     protected function theme_switch_links() {
         // We're just going to return nothing and fail nicely, whats the point in bootstrap if not for responsive?
         return '';
@@ -575,11 +607,11 @@ class theme_bcu_core_course_renderer extends core_course_renderer {
     protected function coursecat_coursebox(coursecat_helper $chelper, $course, $additionalclasses = '') {
         global $CFG, $OUTPUT;
         $type = theme_bcu_get_setting('frontpagerenderer');
-        if($type == 3 || $OUTPUT->body_id() != 'page-site-index') {
+        if ($type == 3 || $OUTPUT->body_id() != 'page-site-index') {
             return parent::coursecat_coursebox($chelper, $course, $additionalclasses = '');
         }
         $additionalcss = '';
-        if($type==2) {
+        if ($type == 2) {
             $additionalcss = 'hover';
         }
 
@@ -605,8 +637,7 @@ class theme_bcu_core_course_renderer extends core_course_renderer {
         $content .= "<a href='$urlb'>";
         $coursename = $chelper->get_course_formatted_name($course);
         $content .= html_writer::start_tag('div', array('class' => 'panel-heading'));
-        if($type==1) {
-            
+        if ($type == 1) {
             $content .= html_writer::link(new moodle_url('/course/view.php', array('id' => $course->id)),
                     $coursename, array('class' => $course->visible ? '' : 'dimmed', 'title' => $coursename));
         }
@@ -619,10 +650,10 @@ class theme_bcu_core_course_renderer extends core_course_renderer {
                         array('data-toggle' => 'collapse', 'data-parent' => '#frontpage-category-combo'));
             }
         }
-        
-        if($type==1) {
+
+        if ($type == 1) {
             $content .= $this->coursecat_coursebox_enrolmenticons($course, $type);
-        }        
+        }
 
         $content .= html_writer::end_tag('div'); // End .panel-heading.
 
@@ -656,7 +687,7 @@ class theme_bcu_core_course_renderer extends core_course_renderer {
         $content .= html_writer::end_tag('div'); // End .panel.
         return $content;
     }
-    
+
     protected function coursecat_coursebox_enrolmenticons($course) {
         $content = '';
         if ($icons = enrol_get_course_info_icons($course)) {
@@ -669,8 +700,8 @@ class theme_bcu_core_course_renderer extends core_course_renderer {
         return $content;
     }
 
-    // Type - 1 = No Overlay
-    // Type - 2 = Overlay
+    // Type - 1 = No Overlay.
+    // Type - 2 = Overlay.
     protected function coursecat_coursebox_content(coursecat_helper $chelper, $course, $type=3) {
         global $CFG, $OUTPUT, $PAGE;
         if ($chelper->get_show_courses() < self::COURSECAT_SHOW_COURSES_EXPANDED) {
@@ -680,7 +711,7 @@ class theme_bcu_core_course_renderer extends core_course_renderer {
             require_once($CFG->libdir. '/coursecatlib.php');
             $course = new course_in_list($course);
         }
-        if($type == 3 || $OUTPUT->body_id() != 'page-site-index') {
+        if ($type == 3 || $OUTPUT->body_id() != 'page-site-index') {
             return parent::coursecat_coursebox_content($chelper, $course);
         }
         $content = '';
@@ -694,13 +725,13 @@ class theme_bcu_core_course_renderer extends core_course_renderer {
                     '/'. $file->get_contextid(). '/'. $file->get_component(). '/'.
                     $file->get_filearea(). $file->get_filepath(). $file->get_filename(), !$isimage);
             if ($isimage) {
-                if($type==1) {
+                if ($type == 1) {
                     $contentimages .= html_writer::start_tag('div', array('class' => 'courseimage'));
                     $link = new moodle_url('/course/view.php', array('id' => $course->id));
                     $contentimages .= html_writer::link($link, html_writer::empty_tag('img', array('src' => $url)));
                     $contentimages .= html_writer::end_tag('div');
                 } else {
-                    $contentimages .= "<div class='cimbox' style='background: #FFF url($url) no-repeat center center; background-size: contain;'></div>";    
+                    $contentimages .= "<div class='cimbox' style='background: #FFF url($url) no-repeat center center; background-size: contain;'></div>";
                 }
             } else {
                 $image = $this->output->pix_icon(file_file_icon($file, 24), $file->get_filename(), 'moodle');
@@ -711,46 +742,45 @@ class theme_bcu_core_course_renderer extends core_course_renderer {
                         array('class' => 'coursefile fp-filename-icon'));
             }
         }
-        if(strlen($contentimages)==0 && $type==2) {
-            // Default image
+        if (strlen($contentimages) == 0 && $type == 2) {
+            // Default image.
             $url = $PAGE->theme->setting_file_url('frontpagerendererdefaultimage', 'frontpagerendererdefaultimage');
             $contentimages .= "<div class='cimbox' style='background: #FFF url($url) no-repeat center center; background-size: contain;'></div>";
         }
         $content .= $contentimages. $contentfiles;
-        
-        if($type==2) {
+
+        if ($type == 2) {
             $content .= $this->coursecat_coursebox_enrolmenticons($course);
         }
 
-        if($type==2) {
             $content .= html_writer::start_tag('div', array('class'=>'coursebox-content'));
+        if ($type == 2) {
+            $content .= html_writer::start_tag('div', array('class' => 'coursebox-content'));
             $coursename = $chelper->get_course_formatted_name($course);
             $content .= html_writer::tag('h3', html_writer::link(new moodle_url('/course/view.php', array('id' => $course->id)),
                     $coursename, array('class' => $course->visible ? '' : 'dimmed', 'title' => $coursename)));
         }
         $content .= html_writer::start_tag('div', array('class' => 'summary'));
-//      Issue #22597
-//        if(ISSET($coursename)) {
-//            $content .= html_writer::tag('p', html_writer::tag('b', $coursename));
-//        }
+        if (ISSET($coursename)) {
+            $content .= html_writer::tag('p', html_writer::tag('b', $coursename));
+        }
         // Display course summary.
         if ($course->has_summary()) {
-            
             $summs = $chelper->get_course_formatted_summary($course, array('overflowdiv' => false, 'noclean' => true,
                     'para' => false));
             $summs = strip_tags($summs);
             $truncsum = mb_strlen($summs, "utf8") > 200 ? mb_substr($summs, 0, 200, "utf8")."..." : $summs;
             $content .= html_writer::tag('span', $truncsum, array('title' => $summs));
-            
         }
         $coursecontacts = theme_bcu_get_setting('tilesshowcontacts');
-        if($coursecontacts) {
+        if ($coursecontacts) {
             $coursecontacttitle = theme_bcu_get_setting('tilescontactstitle');
             // Display course contacts. See course_in_list::get_course_contacts().
             if ($course->has_course_contacts()) {
                 $content .= html_writer::start_tag('ul', array('class' => 'teachers'));
                 foreach ($course->get_course_contacts() as $userid => $coursecontact) {
-                    $name = ($coursecontacttitle ? $coursecontact['rolename'].': ' : html_writer::tag('i', '&nbsp;', array('class' => 'fa fa-graduation-cap')) ).
+                    $name = ($coursecontacttitle ? $coursecontact['rolename'].': ' : html_writer::tag('i', '&nbsp;',
+                            array('class' => 'fa fa-graduation-cap')) ).
                             html_writer::link(new moodle_url('/user/view.php',
                                     array('id' => $userid, 'course' => SITEID)),
                                 $coursecontact['username']);
@@ -772,14 +802,14 @@ class theme_bcu_core_course_renderer extends core_course_renderer {
                 $content .= html_writer::end_tag('div'); // Coursecat.
             }
         }
-        if($type==2) {
+        if ($type == 2) {
             $content .= html_writer::end_tag('div');
         }
         $content .= html_writer::tag('div', '', array('class' => 'boxfooter')); // Coursecat.
 
         return $content;
     }
-    
+
     public function course_search_form($value = '', $format = 'plain') {
         static $count = 0;
         $formid = 'coursesearch';
@@ -840,7 +870,8 @@ class theme_bcu_core_course_renderer extends core_course_renderer {
                     ));
                 $totalcount = $DB->count_records('course') - 1;
             }
-            $chelper->set_show_courses(self::COURSECAT_SHOW_COURSES_EXPANDED)->set_attributes(array('class' => 'frontpage-course-list-enrolled'));
+            $chelper->set_show_courses(self::COURSECAT_SHOW_COURSES_EXPANDED)->set_attributes(
+                    array('class' => 'frontpage-course-list-enrolled'));
             $output .= $this->coursecat_courses($chelper, $sortedcourses, $totalcount);
 
             if (!empty($rcourses)) {

@@ -28,6 +28,7 @@
 
 <footer id="page-footer">
     <div id="course-footer"><?php echo $OUTPUT->course_footer(); ?></div>
+    <?php if($PAGE->theme->settings->showfooterblocks) { ?>
     <div class="container">
         <div class="row-fluid">
             <?php if (!empty($PAGE->theme->settings->footer1content)) { ?>
@@ -56,13 +57,15 @@
             <?php } ?>
         </div>
     </div>
-        
+    <?php } ?>
     <div class="info container2 clearfix">
+        <?php if($PAGE->theme->settings->showfooterblocks) { ?>
         <div class="footer-inner page ptm pbl container">
             <?php 
             echo $html->footnote;
             ?>
         </div>
+        <?php } ?>
         <div class="pull-right">
             <?php
             echo $OUTPUT->standard_footer_html();

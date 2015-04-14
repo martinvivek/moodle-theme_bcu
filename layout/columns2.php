@@ -24,7 +24,7 @@
  *
  */
 
-require_once(dirname(__FILE__) . '/includes/header.php'); 
+require_once(dirname(__FILE__) . '/includes/header.php');
 $left = theme_bcu_get_block_side();
 ?>
 
@@ -46,11 +46,12 @@ $left = theme_bcu_get_block_side();
             ?>
         </section>
         <?php
-            if($left == 0) {
-                echo $OUTPUT->blocks('side-post', 'span3');
-            }
+        if ($left == 0) {
+            echo $OUTPUT->blocks('side-post', 'span3');
+        }
         ?>
     </div>
     </div>
 
-    <?php require_once(dirname(__FILE__) . '/includes/footer.php'); ?>
+    <?php
+    require_once(dirname(__FILE__) . '/includes/footer.php');

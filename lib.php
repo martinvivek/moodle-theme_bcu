@@ -35,46 +35,6 @@
  */
 function theme_bcu_process_css($css, $theme) {
 
-    // Set the font size.
-    if (!empty($theme->settings->fsize)) {
-        $fsize = $theme->settings->fsize;
-    } else {
-        $fsize = null;
-    }
-    $css = theme_bcu_set_fsize($css, $fsize);
-
-    // Set the link color.
-    if (!empty($theme->settings->linkcolor)) {
-        $linkcolor = $theme->settings->linkcolor;
-    } else {
-        $linkcolor = null;
-    }
-    $css = theme_bcu_set_linkcolor($css, $linkcolor);
-
-    // Set the link hover color.
-    if (!empty($theme->settings->linkhover)) {
-        $linkhover = $theme->settings->linkhover;
-    } else {
-        $linkhover = null;
-    }
-    $css = theme_bcu_set_linkhover($css, $linkhover);
-
-    // Set the main color.
-    if (!empty($theme->settings->maincolor)) {
-        $maincolor = $theme->settings->maincolor;
-    } else {
-        $maincolor = null;
-    }
-    $css = theme_bcu_set_maincolor($css, $maincolor);
-
-    // Set the main headings color.
-    if (!empty($theme->settings->backcolor)) {
-        $backcolor = $theme->settings->backcolor;
-    } else {
-        $backcolor = null;
-    }
-    $css = theme_bcu_set_backcolor($css, $backcolor);
-
     // Set custom CSS.
     if (!empty($theme->settings->customcss)) {
         $customcss = $theme->settings->customcss;
@@ -82,41 +42,36 @@ function theme_bcu_process_css($css, $theme) {
         $customcss = null;
     }
     $css = theme_bcu_set_customcss($css, $customcss);
-    
-    if(!empty($theme->settings->rendereroverlaycolour)) {
-        $rendereroverlaycolour = $theme->settings->rendereroverlaycolour;
-    } else {
-        $rendereroverlaycolour = null;
+
+    // Define the default settings for the theme incase they've not been set.
+    $defaults = array(
+        '[[setting:fsize]]' => '90',
+        '[[setting:linkcolor]]' => '#001E3C',
+        '[[setting:linkhover]]' => '#001E3C',
+        '[[setting:maincolor]]' => '#001E3C',
+        '[[setting:backcolor]]' => '#FFFFFF',
+        '[[setting:rendereroverlaycolour]]' => '#001E3C',
+        '[[setting:rendereroverlayfontcolour]]' => '#FFFFFF',
+        '[[setting:buttoncolour]]' => '#00AEEF',
+        '[[setting:buttonhovercolour]]' => '#0084C2',
+        '[[setting:dividingline]]' => '#3C469C',
+        '[[setting:navbarborder]]' => '#B7B3EF',
+        '[[setting:navbarhover]]' => '#3C469C'
+    );
+
+    // Get all the defined settings for the theme and replace defaults.
+    foreach ($theme->settings as $key => $val) {
+        if (array_key_exists('[[setting:'.$key.']]', $defaults) && !empty($val)) {
+            $defaults['[[setting:'.$key.']]'] = $val;
+        }
     }
-    $css = theme_bcu_set_rendereroverlaycolour($css, $rendereroverlaycolour);
-    
-    if (!empty($theme->settings->rendereroverlayfontcolour)) {
-        $rendereroverlayfontcolour = $theme->settings->rendereroverlayfontcolour;
-    } else {
-        $rendereroverlayfontcolour = null;
-    }
-    $css = theme_bcu_set_rendereroverlayfontcolour($css, $rendereroverlayfontcolour);
-    
-    if(!empty($theme->settings->buttoncolour)) {
-        $buttoncolour = $theme->settings->buttoncolour;
-    } else {
-        $buttoncolour = null;
-    }
-    $css = theme_bcu_set_buttoncolour($css, $buttoncolour);
-    
-    if(!empty($theme->settings->buttonhovercolour)) {
-        $buttonhovercolour = $theme->settings->buttonhovercolour;
-    } else {
-        $buttonhovercolour = null;
-    }
-    $css = theme_bcu_set_buttonhovercolour($css, $buttonhovercolour);
-    
-    if(empty($theme->settings->tilesshowallcontacts) || $theme->settings->tilesshowallcontacts == false) {
+    // Replace the CSS with values from the $defaults array.
+    $css = strtr($css, $defaults);
+    if (empty($theme->settings->tilesshowallcontacts) || $theme->settings->tilesshowallcontacts == false) {
         $css = theme_bcu_set_tilesshowallcontacts($css, false);
     } else {
         $css = theme_bcu_set_tilesshowallcontacts($css, true);
     }
-        
     return $css;
 }
 
@@ -140,99 +95,9 @@ function theme_bcu_set_customcss($css, $customcss) {
     return $css;
 }
 
-function theme_bcu_set_fsize($css, $fsize) {
-    $tag = '[[setting:fsize]]';
-    $replacement = $fsize;
-    if (is_null($replacement)) {
-        $replacement = '90';
-    }
-    $css = str_replace($tag, $replacement, $css);
-    return $css;
-}
-
-function theme_bcu_set_linkcolor($css, $linkcolor) {
-    $tag = '[[setting:linkcolor]]';
-    $replacement = $linkcolor;
-    if (is_null($replacement)) {
-        $replacement = '#001E3C';
-    }
-    $css = str_replace($tag, $replacement, $css);
-    return $css;
-}
-
-function theme_bcu_set_linkhover($css, $linkhover) {
-    $tag = '[[setting:linkhover]]';
-    $replacement = $linkhover;
-    if (is_null($replacement)) {
-        $replacement = '#001E3C';
-    }
-    $css = str_replace($tag, $replacement, $css);
-    return $css;
-}
-
-function theme_bcu_set_maincolor($css, $maincolor) {
-    $tag = '[[setting:maincolor]]';
-    $replacement = $maincolor;
-    if (is_null($replacement)) {
-        $replacement = '#001e3c';
-    }
-    $css = str_replace($tag, $replacement, $css);
-    return $css;
-}
-
-function theme_bcu_set_backcolor($css, $backcolor) {
-    $tag = '[[setting:backcolor]]';
-    $replacement = $backcolor;
-    if (is_null($replacement)) {
-        $replacement = '#F1EEE7';
-    }
-    $css = str_replace($tag, $replacement, $css);
-    return $css;
-}
-
-function theme_bcu_set_rendereroverlaycolour($css, $rendereroverlaycolour) {
-    $tag = '[[setting:rendereroverlaycolour]]';
-    $replacement = $rendereroverlaycolour;
-    if (is_null($replacement)) {
-        $replacement = '#001e3c';
-    }
-    $css = str_replace($tag, $replacement, $css);
-    return $css;
-}
-
-function theme_bcu_set_rendereroverlayfontcolour($css, $rendereroverlayfontcolour) {
-    $tag = '[[setting:rendereroverlayfontcolour]]';
-    $replacement = $rendereroverlayfontcolour;
-    if (is_null($replacement)) {
-        $replacement = '#FFF';
-    }
-    $css = str_replace($tag, $replacement, $css);
-    return $css;
-}
-
-function theme_bcu_set_buttoncolour($css, $buttoncolour) {
-    $tag = '[[setting:buttoncolour]]';
-    $replacement = $buttoncolour;
-    if (is_null($replacement)) {
-        $replacement = '#00aeef';
-    }
-    $css = str_replace($tag, $replacement, $css);
-    return $css;
-}
-
-function theme_bcu_set_buttonhovercolour($css, $buttonhovercolour) {
-    $tag = '[[setting:buttonhovercolour]]';
-    $replacement = $buttonhovercolour;
-    if (is_null($replacement)) {
-        $replacement = '#0084c2';
-    }
-    $css = str_replace($tag, $replacement, $css);
-    return $css;
-}
-
 function theme_bcu_set_tilesshowallcontacts($css, $display) {
     $tag = '[[setting:tilesshowallcontacts]]';
-    if($display) {
+    if ($display) {
         $replacement = 'block';
     } else {
         $replacement = 'none';
@@ -240,6 +105,7 @@ function theme_bcu_set_tilesshowallcontacts($css, $display) {
     $css = str_replace($tag, $replacement, $css);
     return $css;
 }
+
 
 function theme_bcu_initialise_zoom(moodle_page $page) {
     user_preference_allow_ajax_update('theme_bcu_zoom', PARAM_TEXT);
@@ -397,7 +263,8 @@ function theme_bcu_get_course_activities() {
 }
 
 function theme_bcu_performance_output($param) {
-    $html = html_writer::tag('span', get_string('loadtime', 'theme_bcu').' '. round($param['realtime'], 2) . ' ' . get_string('seconds'), array('id' => 'load'));
+    $html = html_writer::tag('span', get_string('loadtime', 'theme_bcu').' '. round($param['realtime'], 2) . ' ' .
+            get_string('seconds'), array('id' => 'load'));
     return $html;
 }
 
@@ -408,5 +275,15 @@ function theme_bcu_page_init(moodle_page $page) {
     $page->requires->jquery_plugin('flexslider', 'theme_bcu');
     $page->requires->jquery_plugin('easing', 'theme_bcu');
     $page->requires->jquery_plugin('bcu', 'theme_bcu');
-    
+}
+
+function theme_bcu_remove_site_fullname($heading) {
+    global $SITE, $PAGE;
+    if (strpos($PAGE->pagetype, 'course-view-') === 0) {
+        return $heading;
+    }
+
+    $header = preg_replace("/^".$SITE->fullname."/", "", $heading);
+
+    return $header;
 }

@@ -49,6 +49,7 @@ if (is_siteadmin()) {
     $default = '#001E3C';
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, $default, $previewconfig);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     $name = 'theme_bcu/maincolor';
@@ -56,6 +57,7 @@ if (is_siteadmin()) {
     $description = get_string('maincolordesc', 'theme_bcu');
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#001E3C', $previewconfig);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     $name = 'theme_bcu/backcolor';
@@ -63,34 +65,63 @@ if (is_siteadmin()) {
     $description = get_string('backcolordesc', 'theme_bcu');
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#FFF', $previewconfig);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
-    
+
     $name = 'theme_bcu/buttoncolour';
     $title = get_string('buttoncolour', 'theme_bcu');
     $description = get_string('buttoncolourdesc', 'theme_bcu');
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#00aeef', $previewconfig);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
-    
+
     $name = 'theme_bcu/buttonhovercolour';
     $title = get_string('buttonhovercolour', 'theme_bcu');
     $description = get_string('buttonhovercolourdesc', 'theme_bcu');
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#0084c2', $previewconfig);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
-    
+
     $name = 'theme_bcu/rendereroverlaycolour';
     $title = get_string('rendereroverlaycolour', 'theme_bcu');
     $description = get_string('rendereroverlaycolourdesc', 'theme_bcu');
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#001E3C', $previewconfig);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
-    
+
     $name = 'theme_bcu/rendereroverlayfontcolour';
     $title = get_string('rendereroverlayfontcolour', 'theme_bcu');
     $description = get_string('rendereroverlayfontcolourdesc', 'theme_bcu');
     $previewconfig = null;
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '#FFF', $previewconfig);
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $temp->add($setting);
+
+    $name = 'theme_bcu/dividingline';
+    $title = get_string('dividingline', 'theme_bcu');
+    $description = get_string('dividinglinedesc', 'theme_bcu');
+    $previewconfig = null;
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, '#B7B3EF', $previewconfig);
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $temp->add($setting);
+
+    $name = 'theme_bcu/navbarborder';
+    $title = get_string('navbarborder', 'theme_bcu');
+    $description = get_string('navbarborderdesc', 'theme_bcu');
+    $previewconfig = null;
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, '#B7B3EF', $previewconfig);
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $temp->add($setting);
+
+    $name = 'theme_bcu/navbarhover';
+    $title = get_string('navbarhover', 'theme_bcu');
+    $description = get_string('navbarhoverdesc', 'theme_bcu');
+    $previewconfig = null;
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, '#3C469C', $previewconfig);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
 
     $ADMIN->add('theme_bcu', $temp);
@@ -98,28 +129,28 @@ if (is_siteadmin()) {
     $temp = new admin_settingpage('theme_bcu_header', get_string('headersettings', 'theme_bcu'));
     $temp->add(new admin_setting_heading('theme_bcu_header', get_string('headersettingsheading', 'theme_bcu'),
         format_text(get_string('headerdesc', 'theme_bcu'), FORMAT_MARKDOWN)));
-    
+
     $name = 'theme_bcu/sitetitle';
     $title = get_string('sitetitle', 'theme_bcu');
     $description = get_string('sitetitledesc', 'theme_bcu');
     $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
-        
+
     $name = 'theme_bcu/logo';
     $title = get_string('logo', 'theme_bcu');
     $description = get_string('logodesc', 'theme_bcu');
     $setting = new admin_setting_configstoredfile($name, $title, $description, 'logo');
     $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
-    
+
     $name = 'theme_bcu/alertbox';
     $title = get_string('alertbox', 'theme_bcu');
     $description = get_string('alertboxdesc', 'theme_bcu');
     $default = '';
     $setting = new admin_setting_confightmleditor($name, $title, $description, $default);
     $temp->add($setting);
-    
+
     $temp->add(new admin_setting_heading('theme_bcu_navbar', get_string('navbarsettingsheading', 'theme_bcu'),
         format_text(get_string('navbardesc', 'theme_bcu'), FORMAT_MARKDOWN)));
 
@@ -183,9 +214,9 @@ if (is_siteadmin()) {
     $description = get_string('enablehelpdesc', 'theme_bcu');
     $setting = new admin_setting_configtext($name, $title, $description, '', PARAM_URL);
     $temp->add($setting);
-    
+
     $name = 'theme_bcu/helptarget';
-    $title = get_string('helptarget', 'theme_bcu'); 
+    $title = get_string('helptarget', 'theme_bcu');
     $description = get_string('helptargetdesc', 'theme_bcu');
     $choices = array(
         '_blank' => get_string('targetnewwindow', 'theme_bcu'),
@@ -193,17 +224,17 @@ if (is_siteadmin()) {
     );
     $setting = new admin_setting_configselect($name, $title, $description, '_blank', $choices);
     $temp->add($setting);
-    
+
     $name = 'theme_bcu/toolsmenu';
     $title = get_string('toolsmenu', 'theme_bcu');
     $description = get_string('toolsmenudesc', 'theme_bcu');
     $setting = new admin_setting_configtextarea($name, $title, $description, '', PARAM_RAW, '50', '10');
     $temp->add($setting);
-    
+
     $ADMIN->add('theme_bcu', $temp);
 
     $temp = new admin_settingpage('theme_bcu_frontpage_blocks', get_string('frontpageblocksettings', 'theme_bcu'));
-    
+
     $name = 'theme_bcu/infobox';
     $title = get_string('infobox', 'theme_bcu');
     $description = get_string('infoboxdesc', 'theme_bcu');
@@ -217,7 +248,7 @@ if (is_siteadmin()) {
     $default = '';
     $setting = new admin_setting_confightmleditor($name, $title, $description, $default);
     $temp->add($setting);
-    
+
     $temp->add(new admin_setting_heading('theme_bcu_marketing', get_string('marketingsettingsheading', 'theme_bcu'),
         format_text(get_string('marketingdesc', 'theme_bcu'), FORMAT_MARKDOWN)));
 
@@ -245,11 +276,11 @@ if (is_siteadmin()) {
     $description = get_string('market4desc', 'theme_bcu');
     $setting = new admin_setting_confightmleditor($name, $title, $description, $default);
     $temp->add($setting);
-    
+
     $ADMIN->add('theme_bcu', $temp);
-    
+
     $temp = new admin_settingpage('theme_bcu_frontpage_slider', get_string('frontpageslidersettings', 'theme_bcu'));
-    
+
     $temp->add(new admin_setting_heading('theme_bcu_slideshow', get_string('slideshowsettingsheading', 'theme_bcu'),
         format_text(get_string('slideshowdesc', 'theme_bcu'), FORMAT_MARKDOWN)));
 
@@ -352,13 +383,13 @@ if (is_siteadmin()) {
     $default = '';
     $setting = new admin_setting_confightmleditor($name, $title, $description, $default);
     $temp->add($setting);
-        
+
     $ADMIN->add('theme_bcu', $temp);
-    
+
     $temp = new admin_settingpage('theme_bcu_frontpage_courses', get_string('frontpagecoursesettings', 'theme_bcu'));
     $temp->add(new admin_setting_heading('theme_bcu_frontpage_courses', get_string('frontpagesettingsheading', 'theme_bcu'),
-        format_text(get_string('frontpagedesc', 'theme_bcu'), FORMAT_MARKDOWN))); 
-    
+        format_text(get_string('frontpagedesc', 'theme_bcu'), FORMAT_MARKDOWN)));
+
     $name = 'theme_bcu/frontpagerenderer';
     $title = get_string('frontpagerenderer', 'theme_bcu');
     $description = get_string('frontpagerendererdesc', 'theme_bcu');
@@ -370,38 +401,38 @@ if (is_siteadmin()) {
     $setting = new admin_setting_configselect($name, $title, $description, 2, $choices);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
-    
+
     $name = 'theme_bcu/frontpagerendererdefaultimage';
     $title = get_string('frontpagerendererdefaultimage', 'theme_bcu');
     $description = get_string('frontpagerendererdefaultimagedesc', 'theme_bcu');
     $setting = new admin_setting_configstoredfile($name, $title, $description, 'frontpagerendererdefaultimage');
     $setting->set_updatedcallback('theme_reset_all_caches');
     $temp->add($setting);
-    
+
     $name = 'theme_bcu/tilesshowcontacts';
     $title = get_string('tilesshowcontacts', 'theme_bcu');
     $description = get_string('tilesshowcontactsdesc', 'theme_bcu');
     $setting = new admin_setting_configcheckbox($name, $title, $description, 1);
     $temp->add($setting);
-    
+
     $name = 'theme_bcu/tilesshowallcontacts';
     $title = get_string('tilesshowallcontacts', 'theme_bcu');
     $description = get_string('tilesshowallcontactsdesc', 'theme_bcu');
     $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
     $temp->add($setting);
-    
+
     $name = 'theme_bcu/tilescontactstitle';
     $title = get_string('tilescontactstitle', 'theme_bcu');
     $description = get_string('tilescontactstitledesc', 'theme_bcu');
     $setting = new admin_setting_configcheckbox($name, $title, $description, 1);
     $temp->add($setting);
-                
+
     $ADMIN->add('theme_bcu', $temp);
-    
+
     $temp = new admin_settingpage('theme_bcu_layout', get_string('layoutsettings', 'theme_bcu'));
     $temp->add(new admin_setting_heading('theme_bcu_layout', get_string('layoutsettingsheading', 'theme_bcu'),
         format_text(get_string('layoutdesc', 'theme_bcu'), FORMAT_MARKDOWN)));
-    
+
     $name = 'theme_bcu/blockside';
     $title = get_string('blockside', 'theme_bcu');
     $description = get_string('blocksidedesc', 'theme_bcu');
@@ -411,12 +442,18 @@ if (is_siteadmin()) {
             1 => get_string('leftblocks', 'theme_bcu'),
         ));
     $temp->add($setting);
-    
+
     $ADMIN->add('theme_bcu', $temp);
 
     $temp = new admin_settingpage('theme_bcu_footer', get_string('footersettings', 'theme_bcu'));
     $temp->add(new admin_setting_heading('theme_bcu_footer', get_string('footersettingsheading', 'theme_bcu'),
         format_text(get_string('footerdesc', 'theme_bcu'), FORMAT_MARKDOWN)));
+
+    $name = 'theme_bcu/showfooterblocks';
+    $title = get_string('showfooterblocks', 'theme_bcu');
+    $description = get_string('showfooterblocksdesc', 'theme_bcu');
+    $setting = new admin_setting_configcheckbox($name, $title, $description, 1);
+    $temp->add($setting);
 
     $name = 'theme_bcu/footer1header';
     $title = get_string('footer1header', 'theme_bcu');
@@ -473,7 +510,7 @@ if (is_siteadmin()) {
     $default = '';
     $setting = new admin_setting_confightmleditor($name, $title, $description, $default);
     $temp->add($setting);
-    
+
     $name = 'theme_bcu/footnote';
     $title = get_string('footnote', 'theme_bcu');
     $description = get_string('footnotedesc', 'theme_bcu');

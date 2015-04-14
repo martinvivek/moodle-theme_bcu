@@ -15,13 +15,8 @@ a.back-to-top {
     font-size: 1.1em;
 }
 
-
-.panel, .forumpost {
-	
-}
-
 .coursebox.panel {
-	border-radius: 2px;
+    border-radius: 2px;
     position: relative;
     background: #fafafa !important;
     border: 1px solid #e8eaeb;
@@ -30,9 +25,9 @@ a.back-to-top {
 }
 
 .singleselect {
-	display: inline-block;
-	max-width: 100%;
-	width: 100%;
+    display: inline-block;
+    max-width: 100%;
+    width: 100%;
 }
 
 .panel-heading {
@@ -44,13 +39,12 @@ a.back-to-top {
 }
 
 .panel-heading a {
-	font-size: 110%;
-	font-family: 'Droid Sans',sans-serif;
-	font-weight: bold;
-	
-	white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+    font-size: 110%;
+    font-family: 'Droid Sans',sans-serif;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     max-width: 80%;
     display: inline-block;
 }
@@ -60,10 +54,10 @@ a.back-to-top {
 }
 
 ul.teachers {
-	list-style-type: none;
-	margin: 0 0;
-	padding: 0 0;
-	font-size: 90%;
+    list-style-type: none;
+    margin: 0 0;
+    padding: 0 0;
+    font-size: 90%;
 }
 
 .coursebox .boxfooter {
@@ -78,73 +72,71 @@ ul.teachers {
     text-shadow: none;
 }
 .coursebox .coursebtn {
-   bottom: 10px;
+    bottom: 10px;
     position: absolute;
     right: 28%;
     width: 30%;
 }
 
 @media (max-width: 768px) {
-.coursebox .coursebtn {
-	 right: 22%;
-    width: auto;
-}
-
-#page-site-index a.submit {
-    display: block;
-    margin: 5px auto;
-    text-align: center;
-    white-space: normal;
-    width: auto;
-}
-
+    .coursebox .coursebtn {
+        right: 22%;
+        width: auto;
+    }
+    #page-site-index a.submit {
+        display: block;
+        margin: 5px auto;
+        text-align: center;
+        white-space: normal;
+        width: auto;
+    }
 }
 
 /* forum */
 .forumpost .maincontent .left {
-  padding: 0 10px 0 10px;
+    padding: 0 10px 0 10px;
 }
 .forumpost .row .left {
-  width: auto;
+    width: auto;
 }
 .forumpost .options .commands {
-  margin-left: 0;
+    margin-left: 0;
 }
 .forumpost .subject {
-  font-weight: bold;
+    font-weight: bold;
 }
 .forumsearch input[type=text] {
-  margin-bottom: 0 !important;
+    margin-bottom: 0 !important;
 }
 #page-mod-lesson-edit .singleselect {
     width: auto;
 }
 #page-mod-forum-discuss .discussioncontrol.displaymode {
-  text-align: left;
+    text-align: left;
 }
 #page-mod-forum-discuss .discussioncontrols .discussioncontrol {
-  float: none;
-  width: 100%;
+    float: none;
+    width: 100%;
 }
 #page-mod-forum-discuss .discussioncontrols .discussioncontrol .singleselect {
-  width: 100%;
+    width: 100%;
 }
 #page-mod-forum-discuss .discussioncontrols .discussioncontrol .singleselect select.singleselect {
-  display: block;
-  width: 100%;
-  height: 38px;
-  padding: 8px 12px;
-  font-size: 14px;
-  line-height: 1.42857143;
-  color: #555555;
-  background-color: #ffffff;
-  background-image: none;
-  border: 1px solid #cccccc;
-  border-radius: 4px;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    display: block;
+    width: 100%;
+    height: 38px;
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555555;
+    background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 #page-mod-forum-discuss .discussioncontrols .discussioncontrol .singleselect select.singleselect:focus {
   border-color: #66afe9;
@@ -596,61 +588,49 @@ textarea#page-mod-forum-discuss .discussioncontrols .discussioncontrol.movediscu
     clear: both;
 }
 
-/*headings 
-.headingblock, .sitetopic h2::after, h2.main::after, #site-news-forum h2::after, #frontpage-course-list h2::after, #frontpage-category-names h2::after, #frontpage-category-combo h2::after {
-	background-color: #9D1B12;
-	content: "";
-	display: block;
-	height: 3px;
-	width: 150px;
-	position: relative;
-	top: 3px;
-}
-*/
-
 @media (max-width: 778px) {
-#page-login-index2 .forgetpass {
-    clear: both;
-    float: none;
-    margin: 0 auto;
-    text-align: center;
-    width: 50%;
-    min-width: 200px;
-}
+    #page-login-index2 .forgetpass {
+        clear: both;
+        float: none;
+        margin: 0 auto;
+        text-align: center;
+        width: 50%;
+        min-width: 200px;
+    }
 }
 
 @media (max-width: 520px) {
-.dropdown-menu.usermen {
-    left: 35%;
-    top: 15px;
-}
+    .dropdown-menu.usermen {
+        left: 35%;
+        top: 15px;
+    }
 }
 
 .signuppanel .row .btn {
-	display: none;
-} 
+    display: none;
+}
 
 .coursebox.panel ul.teachers li {
     display: [[setting:tilesshowallcontacts]];
 }
 
 .coursebox.panel ul.teachers li:first-child {
-	display: block;
+    display: block;
 }
 
 #changenumsections .smallicon {
-	width: 24px; 
+    width: 24px;
 }
 
 #id_category, #id_parent {
-	width: 100%;
-	max-width: 100%;
+    width: 100%;w
+    max-width: 100%;
 }
 
 .coursebox .panel-heading {
-	padding: 12px 10px 10px;
+    padding: 12px 10px 10px;
 }
 
 .coursebox .panel-heading a {
-	font-size: 105%;
+    font-size: 105%;
 }

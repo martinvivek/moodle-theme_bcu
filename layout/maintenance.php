@@ -24,7 +24,7 @@
  *
  */
 
-//Get the HTML for the settings bits.
+// Get the HTML for the settings bits.
 $html = theme_bcu_get_html_for_settings($OUTPUT, $PAGE);
 
 echo $OUTPUT->doctype();
@@ -51,4 +51,5 @@ echo $OUTPUT->doctype();
         </div>
     </div>
 
-    <?php require_once(dirname(__FILE__) . '/includes/footer.php'); ?>
+    <?php
+    require_once(dirname(__FILE__) . '/includes/footer.php');
