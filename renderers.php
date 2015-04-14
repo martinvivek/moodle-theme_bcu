@@ -27,6 +27,7 @@
 require_once($CFG->dirroot.'/blocks/course_overview/locallib.php');
 require_once($CFG->dirroot . "/course/renderer.php");
 require_once($CFG->libdir. '/coursecatlib.php');
+require_once($CFG->dirroot . "/mod/assign/renderer.php");
 
 class theme_bcu_core_renderer extends core_renderer {
     /** @var custom_menu_item language The language menu if created */
@@ -64,7 +65,7 @@ class theme_bcu_core_renderer extends core_renderer {
     }
 
     protected function render_user_menu(custom_menu $menu) {
-        global $CFG, $USER, $DB;
+        global $CFG, $USER, $DB, $OUTPUT;
 
         $addlangmenu = true;
         $addmessagemenu = true;
@@ -367,7 +368,7 @@ class theme_bcu_core_renderer extends core_renderer {
                 $branchurl = new moodle_url('#');
                 $branch = $menu->add($branchlabel, $branchurl, $branchtitle, 10002);
 
-                $branchtitle = "People";
+                $branchtitle = "Группы";
                 $branchlabel = '<i class="fa fa-users"></i>'.$branchtitle;
                 $branchurl = new moodle_url('/user/index.php', array('id' => $PAGE->course->id));
                 $branch->add($branchlabel, $branchurl, $branchtitle, 100003);
@@ -719,8 +720,8 @@ class theme_bcu_core_course_renderer extends core_course_renderer {
         
         if($type==2) {
             $content .= $this->coursecat_coursebox_enrolmenticons($course);
-        }    
-        
+        }
+
         if($type==2) {
             $content .= html_writer::start_tag('div', array('class'=>'coursebox-content'));
             $coursename = $chelper->get_course_formatted_name($course);
@@ -728,16 +729,17 @@ class theme_bcu_core_course_renderer extends core_course_renderer {
                     $coursename, array('class' => $course->visible ? '' : 'dimmed', 'title' => $coursename)));
         }
         $content .= html_writer::start_tag('div', array('class' => 'summary'));
-        if(ISSET($coursename)) {
-            $content .= html_writer::tag('p', html_writer::tag('b', $coursename));
-        }
+//      Issue #22597
+//        if(ISSET($coursename)) {
+//            $content .= html_writer::tag('p', html_writer::tag('b', $coursename));
+//        }
         // Display course summary.
         if ($course->has_summary()) {
             
             $summs = $chelper->get_course_formatted_summary($course, array('overflowdiv' => false, 'noclean' => true,
                     'para' => false));
             $summs = strip_tags($summs);
-            $truncsum = strlen($summs) > 70 ? substr($summs, 0, 70)."..." : $summs;
+            $truncsum = mb_strlen($summs, "utf8") > 200 ? mb_substr($summs, 0, 200, "utf8")."..." : $summs;
             $content .= html_writer::tag('span', $truncsum, array('title' => $summs));
             
         }
@@ -942,4 +944,364 @@ class theme_bcu_core_course_renderer extends core_course_renderer {
         }
         return $content;
     }
+}
+
+class theme_bcu_mod_assign_renderer extends mod_assign_renderer
+{
+
+  /**
+   * Render a table containing the current status of the submission.
+   *
+   * @param assign_submission_status $status
+   * @return string
+   */
+  public function render_assign_submission_status(assign_submission_status $status) {
+    $o = '';
+    $o .= $this->output->container_start('submissionstatustable');
+    $o .= $this->output->heading(get_string('submissionstatusheading', 'assign'), 3);
+    $time = time();
+
+    if ($status->allowsubmissionsfromdate &&
+      $time <= $status->allowsubmissionsfromdate) {
+      $o .= $this->output->box_start('generalbox boxaligncenter submissionsalloweddates');
+      if ($status->alwaysshowdescription) {
+        $date = userdate($status->allowsubmissionsfromdate);
+        $o .= get_string('allowsubmissionsfromdatesummary', 'assign', $date);
+      } else {
+        $date = userdate($status->allowsubmissionsfromdate);
+        $o .= get_string('allowsubmissionsanddescriptionfromdatesummary', 'assign', $date);
+      }
+      $o .= $this->output->box_end();
+    }
+    $o .= $this->output->box_start('boxaligncenter submissionsummarytable');
+
+    $t = new html_table();
+
+    if ($status->teamsubmissionenabled) {
+      $row = new html_table_row();
+      $cell1 = new html_table_cell(get_string('submissionteam', 'assign'));
+      $group = $status->submissiongroup;
+      if ($group) {
+        $cell2 = new html_table_cell(format_string($group->name, false, $status->context));
+      } else {
+        $cell2 = new html_table_cell(get_string('defaultteam', 'assign'));
+      }
+      $row->cells = array($cell1, $cell2);
+      $t->data[] = $row;
+    }
+
+    if ($status->attemptreopenmethod != ASSIGN_ATTEMPT_REOPEN_METHOD_NONE) {
+      $currentattempt = 1;
+      if (!$status->teamsubmissionenabled) {
+        if ($status->submission) {
+          $currentattempt = $status->submission->attemptnumber + 1;
+        }
+      } else {
+        if ($status->teamsubmission) {
+          $currentattempt = $status->teamsubmission->attemptnumber + 1;
+        }
+      }
+
+      $row = new html_table_row();
+      $cell1 = new html_table_cell(get_string('attemptnumber', 'assign'));
+      $maxattempts = $status->maxattempts;
+      if ($maxattempts == ASSIGN_UNLIMITED_ATTEMPTS) {
+        $message = get_string('currentattempt', 'assign', $currentattempt);
+      } else {
+        $message = get_string('currentattemptof', 'assign', array('attemptnumber'=>$currentattempt,
+          'maxattempts'=>$maxattempts));
+      }
+      $cell2 = new html_table_cell($message);
+      $row->cells = array($cell1, $cell2);
+      $t->data[] = $row;
+    }
+
+    $row = new html_table_row();
+    $cell1 = new html_table_cell(get_string('submissionstatus', 'assign'));
+    if (!$status->teamsubmissionenabled) {
+      if ($status->submission && $status->submission->status != ASSIGN_SUBMISSION_STATUS_NEW) {
+        $statusstr = get_string('submissionstatus_' . $status->submission->status, 'assign');
+        $cell2 = new html_table_cell($statusstr);
+        $cell2->attributes = array('class'=>'submissionstatus' . $status->submission->status);
+      } else {
+        if (!$status->submissionsenabled) {
+          $cell2 = new html_table_cell(get_string('noonlinesubmissions', 'assign'));
+        } else {
+          $cell2 = new html_table_cell(get_string('noattempt', 'assign'));
+        }
+      }
+      $row->cells = array($cell1, $cell2);
+      $t->data[] = $row;
+    } else {
+      $row = new html_table_row();
+      $cell1 = new html_table_cell(get_string('submissionstatus', 'assign'));
+      if ($status->teamsubmission && $status->teamsubmission->status != ASSIGN_SUBMISSION_STATUS_NEW) {
+        $teamstatus = $status->teamsubmission->status;
+        $submissionsummary = get_string('submissionstatus_' . $teamstatus, 'assign');
+        $groupid = 0;
+        if ($status->submissiongroup) {
+          $groupid = $status->submissiongroup->id;
+        }
+
+        $members = $status->submissiongroupmemberswhoneedtosubmit;
+        $userslist = array();
+        foreach ($members as $member) {
+          $urlparams = array('id' => $member->id, 'course'=>$status->courseid);
+          $url = new moodle_url('/user/view.php', $urlparams);
+          if ($status->view == assign_submission_status::GRADER_VIEW && $status->blindmarking) {
+            $userslist[] = $member->alias;
+          } else {
+            $fullname = fullname($member, $status->canviewfullnames);
+            $userslist[] = $this->output->action_link($url, $fullname);
+          }
+        }
+        if (count($userslist) > 0) {
+          $userstr = join(', ', $userslist);
+          $formatteduserstr = get_string('userswhoneedtosubmit', 'assign', $userstr);
+          $submissionsummary .= $this->output->container($formatteduserstr);
+        }
+
+        $cell2 = new html_table_cell($submissionsummary);
+        $cell2->attributes = array('class'=>'submissionstatus' . $status->teamsubmission->status);
+      } else {
+        $cell2 = new html_table_cell(get_string('nosubmission', 'assign'));
+        if (!$status->submissionsenabled) {
+          $cell2 = new html_table_cell(get_string('noonlinesubmissions', 'assign'));
+        } else {
+          $cell2 = new html_table_cell(get_string('nosubmission', 'assign'));
+        }
+      }
+      $row->cells = array($cell1, $cell2);
+      $t->data[] = $row;
+    }
+
+    // Is locked?
+    if ($status->locked) {
+      $row = new html_table_row();
+      $cell1 = new html_table_cell();
+      $cell2 = new html_table_cell(get_string('submissionslocked', 'assign'));
+      $cell2->attributes = array('class'=>'submissionlocked');
+      $row->cells = array($cell1, $cell2);
+      $t->data[] = $row;
+    }
+
+    // Grading status.
+    $row = new html_table_row();
+    $cell1 = new html_table_cell(get_string('gradingstatus', 'assign'));
+
+    if ($status->gradingstatus == ASSIGN_GRADING_STATUS_GRADED ||
+      $status->gradingstatus == ASSIGN_GRADING_STATUS_NOT_GRADED) {
+      $cell2 = new html_table_cell(get_string($status->gradingstatus, 'assign'));
+    } else {
+      $gradingstatus = 'markingworkflowstate' . $status->gradingstatus;
+      $cell2 = new html_table_cell(get_string($gradingstatus, 'assign'));
+    }
+    if ($status->gradingstatus == ASSIGN_GRADING_STATUS_GRADED ||
+      $status->gradingstatus == ASSIGN_MARKING_WORKFLOW_STATE_RELEASED) {
+      $cell2->attributes = array('class' => 'submissiongraded');
+    } else {
+      $cell2->attributes = array('class' => 'submissionnotgraded');
+    }
+    $row->cells = array($cell1, $cell2);
+    $t->data[] = $row;
+
+    $submission = $status->teamsubmission ? $status->teamsubmission : $status->submission;
+    $duedate = $status->duedate;
+    if ($duedate > 0) {
+      // Due date.
+      $row = new html_table_row();
+      $cell1 = new html_table_cell(get_string('duedate', 'assign'));
+      $cell2 = new html_table_cell(userdate($duedate));
+      $row->cells = array($cell1, $cell2);
+      $t->data[] = $row;
+
+      if ($status->view == assign_submission_status::GRADER_VIEW) {
+        if ($status->cutoffdate) {
+          // Cut off date.
+          $row = new html_table_row();
+          $cell1 = new html_table_cell(get_string('cutoffdate', 'assign'));
+          $cell2 = new html_table_cell(userdate($status->cutoffdate));
+          $row->cells = array($cell1, $cell2);
+          $t->data[] = $row;
+        }
+      }
+
+      if ($status->extensionduedate) {
+        // Extension date.
+        $row = new html_table_row();
+        $cell1 = new html_table_cell(get_string('extensionduedate', 'assign'));
+        $cell2 = new html_table_cell(userdate($status->extensionduedate));
+        $row->cells = array($cell1, $cell2);
+        $t->data[] = $row;
+        $duedate = $status->extensionduedate;
+      }
+
+      // Time remaining.
+      $row = new html_table_row();
+      $cell1 = new html_table_cell(get_string('timeremaining', 'assign'));
+      if ($duedate - $time <= 0) {
+        if (!$submission ||
+          $submission->status != ASSIGN_SUBMISSION_STATUS_SUBMITTED) {
+          if ($status->submissionsenabled) {
+            $overduestr = get_string('overdue', 'assign', format_time($time - $duedate));
+            $cell2 = new html_table_cell($overduestr);
+            $cell2->attributes = array('class'=>'overdue');
+          } else {
+            $cell2 = new html_table_cell(get_string('duedatereached', 'assign'));
+          }
+        } else {
+          if ($submission->timemodified > $duedate) {
+            $latestr = get_string('submittedlate',
+              'assign',
+              format_time($submission->timemodified - $duedate));
+            $cell2 = new html_table_cell($latestr);
+            $cell2->attributes = array('class'=>'latesubmission');
+          } else {
+            $earlystr = get_string('submittedearly',
+              'assign',
+              format_time($submission->timemodified - $duedate));
+            $cell2 = new html_table_cell($earlystr);
+            $cell2->attributes = array('class'=>'earlysubmission');
+          }
+        }
+      } else {
+        $cell2 = new html_table_cell(format_time($duedate - $time));
+      }
+      $row->cells = array($cell1, $cell2);
+      $t->data[] = $row;
+    }
+
+    // Show graders whether this submission is editable by students.
+    if ($status->view == assign_submission_status::GRADER_VIEW) {
+      $row = new html_table_row();
+      $cell1 = new html_table_cell(get_string('editingstatus', 'assign'));
+      if ($status->canedit) {
+        $cell2 = new html_table_cell(get_string('submissioneditable', 'assign'));
+        $cell2->attributes = array('class'=>'submissioneditable');
+      } else {
+        $cell2 = new html_table_cell(get_string('submissionnoteditable', 'assign'));
+        $cell2->attributes = array('class'=>'submissionnoteditable');
+      }
+      $row->cells = array($cell1, $cell2);
+      $t->data[] = $row;
+    }
+
+    // Grading criteria preview.
+    if (!empty($status->gradingcontrollerpreview)) {
+      $row = new html_table_row();
+      $cell1 = new html_table_cell(get_string('gradingmethodpreview', 'assign'));
+      $cell2 = new html_table_cell($status->gradingcontrollerpreview);
+      $row->cells = array($cell1, $cell2);
+      $t->data[] = $row;
+    }
+
+    // Last modified.
+    if ($submission) {
+      $row = new html_table_row();
+      $cell1 = new html_table_cell(get_string('timemodified', 'assign'));
+      $cell2 = new html_table_cell(userdate($submission->timemodified));
+      $row->cells = array($cell1, $cell2);
+      $t->data[] = $row;
+
+      foreach ($status->submissionplugins as $plugin) {
+        $pluginshowsummary = !$plugin->is_empty($submission) || !$plugin->allow_submissions();
+        if ($plugin->is_enabled() &&
+          $plugin->is_visible() &&
+          $plugin->has_user_summary() &&
+          $pluginshowsummary) {
+
+          $row = new html_table_row();
+          $cell1 = new html_table_cell($plugin->get_name());
+          $displaymode = assign_submission_plugin_submission::SUMMARY;
+          $pluginsubmission = new assign_submission_plugin_submission($plugin,
+            $submission,
+            $displaymode,
+            $status->coursemoduleid,
+            $status->returnaction,
+            $status->returnparams);
+          $cell2 = new html_table_cell($this->render($pluginsubmission));
+          $row->cells = array($cell1, $cell2);
+          $t->data[] = $row;
+        }
+      }
+    }
+
+    $o .= html_writer::table($t);
+    $o .= $this->output->box_end();
+
+    // Links.
+
+    $cm = get_coursemodule_from_id("assign", $status->coursemoduleid);
+    $cf = course_get_format($status->courseid);
+    $section_num = null;
+    foreach ($cf->get_sections($cm->section) as $num => $section_info) {
+      /* @var $section_info section_info */
+      if ($section_info->id == $cm->section) {
+        $section_num = $num;
+        break;
+      }
+    }
+    if ($status->view == assign_submission_status::STUDENT_VIEW) {
+      if ($status->canedit) {
+        if (!$submission || $submission->status == ASSIGN_SUBMISSION_STATUS_NEW) {
+          $o .= $this->output->box_start('generalbox submissionaction');
+          $urlparams = array('id' => $status->coursemoduleid, 'action' => 'editsubmission');
+
+          $o .= $this->output->single_button(new moodle_url('/mod/assign/view.php', $urlparams),
+            get_string('addsubmission', 'assign'), 'get');
+          $o .= $this->output->single_button(
+            new moodle_url('/course/view.php', array("id" => $status->courseid, "section" => $section_num)),
+            get_string('backtocourse', 'theme_bcu'),
+            'get'
+          );
+
+          $o .= $this->output->box_end();
+        } else if ($submission->status == ASSIGN_SUBMISSION_STATUS_REOPENED) {
+          $o .= $this->output->box_start('generalbox submissionaction');
+          $urlparams = array('id' => $status->coursemoduleid,
+            'action' => 'editprevioussubmission',
+            'sesskey'=>sesskey());
+          $o .= $this->output->single_button(new moodle_url('/mod/assign/view.php', $urlparams),
+            get_string('addnewattemptfromprevious', 'assign'), 'get');
+          $o .= $this->output->box_end();
+          $o .= $this->output->box_start('generalbox submissionaction');
+          $urlparams = array('id' => $status->coursemoduleid, 'action' => 'editsubmission');
+
+          $o .= $this->output->single_button(new moodle_url('/mod/assign/view.php', $urlparams),
+            get_string('addnewattempt', 'assign'), 'get');
+          $o .= $this->output->single_button(
+            new moodle_url('/course/view.php', array("id" => $status->courseid, "section" => $section_num)),
+            get_string('backtocourse', 'theme_bcu'),
+            'get'
+          );
+
+          $o .= $this->output->box_end();
+        } else {
+          $o .= $this->output->box_start('generalbox submissionaction');
+          $urlparams = array('id' => $status->coursemoduleid, 'action' => 'editsubmission');
+
+          $o .= $this->output->single_button(new moodle_url('/mod/assign/view.php', $urlparams),
+            get_string('editsubmission', 'assign'), 'get');
+          $o .= $this->output->single_button(
+            new moodle_url('/course/view.php', array("id" => $status->courseid, "section" => $section_num)),
+            get_string('backtocourse', 'theme_bcu'),
+            'get'
+          );
+
+          $o .= $this->output->box_end();
+        }
+      }
+
+      if ($status->cansubmit) {
+        $urlparams = array('id' => $status->coursemoduleid, 'action'=>'submit');
+        $o .= $this->output->box_start('generalbox submissionaction');
+        $o .= $this->output->single_button(new moodle_url('/mod/assign/view.php', $urlparams),
+          get_string('submitassignment', 'assign'), 'get');
+        $o .= $this->output->box_end();
+      }
+    }
+
+    $o .= $this->output->container_end();
+    return $o;
+  }
 }

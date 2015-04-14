@@ -1116,7 +1116,6 @@ div.questionbankwindow.block {
 }
 
 .coursebox.hover .teachers {
-	text-align: left;
 	padding-top: 2px;
 }
 
@@ -1162,7 +1161,7 @@ div.questionbankwindow.block {
 
 .coursebox.panel.hover .panel-body .coursebox-content h3 {
 font-weight: normal;
-font-size: 20px;
+font-size: 18px;
 overflow: hidden;
 text-overflow: ellipsis;
 white-space: nowrap;
@@ -1222,6 +1221,9 @@ line-height: normal;
 .gradingform_guide.editor .addcomment, .gradingform_guide.editor .addcriterion {
     margin-top: 10px;
 }
+
+.submissionaction { height: 40px; }
+.submissionaction .singlebutton { float: left; }
 
 /* Custom CSS Settings
 -------------------------*/
