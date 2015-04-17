@@ -633,8 +633,6 @@ class theme_bcu_core_course_renderer extends core_course_renderer {
         }
 
         $content .= html_writer::start_tag('div', array('class' => 'span4 panel panel-default coursebox '.$additionalcss));
-        $urlb = new moodle_url('/course/view.php', array('id' => $course->id));
-        $content .= "<a href='$urlb'>";
         $coursename = $chelper->get_course_formatted_name($course);
         $content .= html_writer::start_tag('div', array('class' => 'panel-heading'));
         if ($type == 1) {
@@ -753,7 +751,6 @@ class theme_bcu_core_course_renderer extends core_course_renderer {
             $content .= $this->coursecat_coursebox_enrolmenticons($course);
         }
 
-            $content .= html_writer::start_tag('div', array('class'=>'coursebox-content'));
         if ($type == 2) {
             $content .= html_writer::start_tag('div', array('class' => 'coursebox-content'));
             $coursename = $chelper->get_course_formatted_name($course);
