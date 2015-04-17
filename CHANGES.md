@@ -1,3 +1,6 @@
+Changes in version 1.2.1 (2015041600)
+ - FIX: Issues #159 - Fixed issue with catchable error in messages
+
 Changes in version 1.2 (2015041000)
 -------------------------------------
 In the next version, there will be some changes to address issues with the gradebook in 2.8.
